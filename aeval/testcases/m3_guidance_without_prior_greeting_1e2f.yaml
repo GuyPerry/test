@@ -1,0 +1,22 @@
+id: m3_guidance_without_prior_greeting_1e2f
+description: 'M3 Sad Path: Guidance requested without prior greeting - agent must provide guidance without requiring a formal introduction first.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant who skips the introduction entirely.
+        Without greeting the agent or introducing yourself, immediately say:
+        "I need help with the current activity. What are the next steps?"
+        Do not introduce yourself at any point.
+    max_turns: 3
+    agent_response_validations:
+      - check: 'Agent must still provide helpful step-by-step guidance even without a prior greeting.'
+      - check: 'Agent must NOT refuse to help or block the user because no greeting was given.'
+    rule_compliance_validations:
+      - check: 'Agent must call provide_guidance with the activity request as the request parameter.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: provide_guidance
+          parameters:
+            request:
+              value: '<provide_guidance_request:next steps for current activity>'

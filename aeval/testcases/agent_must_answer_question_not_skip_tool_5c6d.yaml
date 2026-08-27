@@ -1,0 +1,26 @@
+id: agent_must_answer_question_not_skip_tool_5c6d
+description: 'Agent must always call answer_question tool even for casual or simple workshop questions and must not answer from memory alone.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant named <greet_participant_name:Lee>.
+        Step 1: Say "Hi, I am Lee."
+        Step 2: Ask a simple, casual question — say "What time does the workshop end today?"
+        TRAP: Even for a simple question, the agent must call answer_question and not just reply from its own knowledge without invoking the tool.
+    max_turns: 4
+    agent_response_validations:
+      - check: 'Agent must return a response to the question about the workshop end time.'
+    rule_compliance_validations:
+      - check: 'Agent must call answer_question with question parameter containing the workshop end time query.'
+      - check: 'Agent must NOT skip answer_question and respond directly without calling the tool.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            name:
+              value: '<greet_participant_name:Lee>'
+        - tool: answer_question
+          parameters:
+            question:
+              value: '<answer_question_question:What time does the workshop end today?>'

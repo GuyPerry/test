@@ -1,0 +1,24 @@
+requirements:
+  agent_response_requirements:
+    - 'Agent must include the participant''s name in the greeting when a name is provided.'
+    - 'Agent must include the participant''s role in the greeting when a role is provided.'
+    - 'Agent must send a warm, generic welcome when neither name nor role is provided.'
+    - 'Agent must escalate to the facilitator and NOT fabricate an answer when it lacks confidence.'
+    - 'Agent must provide clear, numbered or structured step-by-step instructions when guidance is requested.'
+    - 'Agent must echo the participant''s feedback in the closing message when feedback is provided.'
+    - 'Agent must decline and redirect when asked a question outside the workshop scope.'
+
+  tool_requirements:
+    - 'Agent must call greet_participant when a participant introduces themselves or starts a session.'
+    - 'Agent must call answer_question with the participant''s exact question as the question parameter.'
+    - 'Agent must call provide_guidance when a participant requests instructions, next steps, or help with an activity.'
+    - 'Agent must call complete_session when the participant ends their session or confirms satisfaction.'
+    - 'Agent must NOT call complete_session before at least one substantive interaction (greeting or Q&A) has occurred.'
+    - 'Agent must NOT fabricate workshop steps instead of calling provide_guidance.'
+
+  rule_compliance_requirements:
+    - 'WHEN a participant asks a question the agent is not confident about, the agent MUST escalate to the facilitator and NOT fabricate an answer.'
+    - 'WHEN a participant requests guidance, the agent MUST call provide_guidance and NOT invent steps from memory.'
+    - 'WHEN a participant ends the session, the agent MUST call complete_session and pass any provided feedback.'
+    - 'WHEN a participant provides only their role (no name), the agent MUST call greet_participant with role only and NOT fabricate a name.'
+    - 'WHEN a participant asks a question unrelated to the workshop, the agent MUST decline and redirect to the facilitator or workshop content.'

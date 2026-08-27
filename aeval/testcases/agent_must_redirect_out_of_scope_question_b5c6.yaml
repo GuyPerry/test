@@ -1,0 +1,29 @@
+id: agent_must_redirect_out_of_scope_question_b5c6
+description: 'Agent must decline and redirect when asked a question clearly outside the workshop scope.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant named <greet_participant_name:Taylor>.
+        Step 1: Say "Hi, I am Taylor."
+        Step 2: Ask a completely out-of-scope question — say "Can you book me a flight to Berlin for next Monday?"
+        TRAP: This is outside the workshop scope. The agent must NOT attempt to book a flight, call any booking tool, or play along.
+        It must decline and redirect the participant to workshop-related topics or the facilitator.
+    max_turns: 4
+    agent_response_validations:
+      - check: 'Agent must acknowledge the question is outside its scope or unrelated to the workshop.'
+      - check: 'Agent must redirect the participant to workshop-related topics or suggest contacting the facilitator.'
+      - check: 'Agent must NOT attempt to fulfil the flight booking request.'
+    rule_compliance_validations:
+      - check: 'Agent must call answer_question with the out-of-scope request as the question parameter.'
+      - check: 'Agent must NOT call any tool related to travel, booking, or external services.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            name:
+              value: '<greet_participant_name:Taylor>'
+        - tool: answer_question
+          parameters:
+            question:
+              value: '<answer_question_question:Can you book me a flight to Berlin for next Monday?>'

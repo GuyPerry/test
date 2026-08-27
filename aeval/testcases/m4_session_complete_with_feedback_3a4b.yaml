@@ -1,0 +1,25 @@
+id: m4_session_complete_with_feedback_3a4b
+description: 'M4 Happy Path: Session completed with explicit feedback - agent must echo feedback in the closing message.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant named <greet_participant_name:Maria>.
+        Step 1: Greet the agent — say "Hi, I am Maria."
+        Step 2: End the session with feedback — say "I am done with the workshop. My feedback is: the hands-on exercises were excellent and very practical."
+    max_turns: 4
+    agent_response_validations:
+      - check: 'Agent must acknowledge the participant is done and confirm the session is complete.'
+      - check: 'Agent must echo or reference the feedback "hands-on exercises were excellent and very practical" in the closing message.'
+    rule_compliance_validations:
+      - check: 'Agent must call complete_session with feedback containing "hands-on exercises were excellent and very practical".'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            name:
+              value: '<greet_participant_name:Maria>'
+        - tool: complete_session
+          parameters:
+            feedback:
+              value: '<complete_session_feedback:hands-on exercises were excellent and very practical>'

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "greet_participant",
+    "description": "Greet a workshop participant by name and/or role.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Participant's name (optional)."
+        },
+        "role": {
+          "type": "string",
+          "description": "Participant's role or job title (optional)."
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "answer_question",
+    "description": "Answer a workshop participant's question about the session.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string",
+          "description": "The participant's question."
+        }
+      },
+      "required": ["question"]
+    }
+  },
+  {
+    "name": "provide_guidance",
+    "description": "Provide step-by-step workshop guidance or instructions for the current activity.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "request": {
+          "type": "string",
+          "description": "Description of what guidance is needed (e.g. 'next steps', 'current activity')."
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "complete_session",
+    "description": "Mark the workshop session as complete and capture participant feedback.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "feedback": {
+          "type": "string",
+          "description": "Optional feedback from the participant about the session."
+        }
+      },
+      "required": []
+    }
+  }
+]

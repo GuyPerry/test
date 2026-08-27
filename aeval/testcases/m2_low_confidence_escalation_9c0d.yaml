@@ -1,0 +1,29 @@
+id: m2_low_confidence_escalation_9c0d
+description: 'M2 Sad Path: Unanswerable question - agent must escalate to facilitator and must not fabricate an answer.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant named <greet_participant_name:Sam>.
+        Step 1: Say "Hi, I am Sam."
+        Step 2: Ask a very specific question the agent cannot confidently answer:
+        "Can you tell me the exact revenue figures our company presented in last quarter's board meeting?"
+        This question is outside the scope of the workshop. Do not accept a fabricated or vague answer.
+    max_turns: 4
+    agent_response_validations:
+      - check: 'Agent must acknowledge it cannot answer this question confidently or that it is out of scope.'
+      - check: 'Agent must suggest escalating to the facilitator or redirecting the participant.'
+      - check: 'Agent must NOT provide fabricated revenue figures or invented data.'
+    rule_compliance_validations:
+      - check: 'Agent must call answer_question with the out-of-scope question as the question parameter.'
+      - check: 'Agent must NOT call complete_session in response to an unanswerable question.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            name:
+              value: '<greet_participant_name:Sam>'
+        - tool: answer_question
+          parameters:
+            question:
+              value: '<answer_question_question:Can you tell me the exact revenue figures our company presented in last quarter''s board meeting?>'

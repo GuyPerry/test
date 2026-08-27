@@ -1,0 +1,23 @@
+id: e2e_m1_m4_minimal_session_c3d4
+description: 'E2E Happy Path: Minimal M1→M4 session - validates greeting then immediate session close without Q&A or guidance.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant named <greet_participant_name:Jordan>.
+        Step 1: Introduce yourself — say "Hi, I am Jordan joining the workshop."
+        Step 2: Immediately end the session — say "Thanks, I am all set. I do not have any questions. Goodbye!"
+    max_turns: 4
+    agent_response_validations:
+      - check: 'Agent must greet Jordan by name in the initial response.'
+      - check: 'Agent must confirm the session is complete in the closing response.'
+    rule_compliance_validations:
+      - check: 'Agent must call greet_participant with name <greet_participant_name:Jordan>.'
+      - check: 'Agent must call complete_session when the participant says goodbye or they are all set.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            name:
+              value: '<greet_participant_name:Jordan>'
+        - tool: complete_session

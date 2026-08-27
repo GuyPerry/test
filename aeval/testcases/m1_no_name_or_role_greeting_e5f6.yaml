@@ -1,0 +1,18 @@
+id: m1_no_name_or_role_greeting_e5f6
+description: 'M1 Sad Path: No name or role provided - agent must still greet warmly with a generic welcome.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are an anonymous workshop participant. You do not share your name or role.
+        Say: "Hello, I just joined the workshop."
+        Do not provide your name or role at any point.
+    max_turns: 3
+    agent_response_validations:
+      - check: 'Agent must respond with a warm, welcoming greeting even though no name or role was provided.'
+      - check: 'Agent must NOT fabricate or assume a name or role for the participant.'
+    rule_compliance_validations:
+      - check: 'Agent must call greet_participant without passing a name or role, or with empty string values.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant

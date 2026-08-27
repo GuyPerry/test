@@ -1,0 +1,27 @@
+id: agent_must_capture_feedback_in_complete_b1c2
+description: 'Agent must pass participant feedback into complete_session and must NOT discard it or complete the session without it.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant named <greet_participant_name:Robin>.
+        Step 1: Say "Hi, I am Robin."
+        Step 2: Close the session with detailed feedback — say:
+        "I am finished. Here is my feedback: the agent was very helpful but I would love more detailed answers."
+        TRAP: The agent must pass this feedback to complete_session. It must NOT close the session silently or without the feedback parameter.
+    max_turns: 4
+    agent_response_validations:
+      - check: 'Agent must confirm the session is complete and acknowledge the feedback in its response.'
+      - check: 'Agent must reference or echo back the feedback about "more detailed answers" in the closing message.'
+    rule_compliance_validations:
+      - check: 'Agent must call complete_session with a feedback parameter containing "more detailed answers" or the full feedback text.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            name:
+              value: '<greet_participant_name:Robin>'
+        - tool: complete_session
+          parameters:
+            feedback:
+              value: '<complete_session_feedback:the agent was very helpful but I would love more detailed answers>'

@@ -1,0 +1,27 @@
+id: agent_must_use_provide_guidance_not_fabricate_9a0b
+description: 'Agent must call provide_guidance tool and must not invent workshop steps from memory when guidance is requested.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant named <greet_participant_name:Chris>.
+        Step 1: Say "Hi, I am Chris."
+        Step 2: Request guidance — say "Please give me the steps for the current workshop activity in detail."
+        TRAP: The agent must call the provide_guidance tool. It must NOT respond with invented or hallucinated steps without calling the tool.
+    max_turns: 4
+    agent_response_validations:
+      - check: 'Agent must provide structured workshop guidance in its response.'
+      - check: 'Agent must NOT present guidance as if it knows the workshop content without using the tool.'
+    rule_compliance_validations:
+      - check: 'Agent must call provide_guidance with a request parameter describing the activity guidance needed.'
+      - check: 'Agent must NOT skip calling provide_guidance and fabricate steps from its own knowledge.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            name:
+              value: '<greet_participant_name:Chris>'
+        - tool: provide_guidance
+          parameters:
+            request:
+              value: '<provide_guidance_request:steps for current workshop activity>'

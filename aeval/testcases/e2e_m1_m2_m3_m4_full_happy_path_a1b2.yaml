@@ -1,0 +1,44 @@
+id: e2e_m1_m2_m3_m4_full_happy_path_a1b2
+description: 'E2E Happy Path: Full M1→M2→M3→M4 flow - validates Participant Greeted, Question Answered, Guidance Provided, Session Completed.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant named <greet_participant_name:Alex> with role <greet_participant_role:Developer>.
+        You are attending a workshop and interacting with the workshop assistant agent.
+        Step 1: Introduce yourself — say "Hi, I am Alex, a Developer joining the workshop today."
+        Step 2: Ask a question — say "What is the agenda for today's session?"
+        Step 3: Ask for guidance — say "Can you walk me through the next steps for the current activity?"
+        Step 4: End the session — say "That was really helpful, I am done. My feedback: great experience!"
+    max_turns: 8
+    agent_response_validations:
+      - check: 'Agent must address the participant by name Alex in the greeting response.'
+      - check: 'Agent must include the word Developer (or the role) in the greeting response.'
+      - check: 'Agent must return a response to the agenda question that is relevant to the workshop.'
+      - check: 'Agent must provide structured step-by-step guidance when navigation is requested.'
+      - check: 'Agent must echo the feedback "great experience" in the session closing message.'
+    rule_compliance_validations:
+      - check: 'Agent must call greet_participant with name <greet_participant_name:Alex> and role <greet_participant_role:Developer>.'
+      - check: 'Agent must call answer_question with the agenda question as the question parameter.'
+      - check: 'Agent must call provide_guidance for the activity navigation request.'
+      - check: 'Agent must call complete_session with feedback containing "great experience".'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            name:
+              value: '<greet_participant_name:Alex>'
+            role:
+              value: '<greet_participant_role:Developer>'
+        - tool: answer_question
+          parameters:
+            question:
+              value: '<answer_question_question:What is the agenda for today''s session?>'
+        - tool: provide_guidance
+          parameters:
+            request:
+              value: '<provide_guidance_request:next steps for current activity>'
+        - tool: complete_session
+          parameters:
+            feedback:
+              value: '<complete_session_feedback:great experience>'

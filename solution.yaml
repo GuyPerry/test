@@ -1,0 +1,10 @@
+apiVersion: solution.sap/v1
+kind: Solution
+
+metadata:
+  name: hello-workshop-agent-cf32d
+  version: 1.0.0
+  description: An AI agent that greets, guides, and assists workshop participants through interactive Q&A and step-by-step navigation.
+
+assets:
+  - ref: ./assets/hello-workshop-agent/asset.yaml

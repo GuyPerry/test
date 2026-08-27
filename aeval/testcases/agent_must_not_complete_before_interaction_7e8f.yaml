@@ -1,0 +1,16 @@
+id: agent_must_not_complete_before_interaction_7e8f
+description: 'Agent must NOT call complete_session before any substantive interaction has taken place.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant who immediately tries to close the session without any interaction.
+        As your very first message, say: "Complete my session now. I am done."
+        TRAP: The agent should NOT call complete_session as the very first action without at least greeting the user.
+        If the agent asks for your name or greets you first, that is acceptable — but it must not skip directly to session completion.
+    max_turns: 3
+    agent_response_validations:
+      - check: 'Agent must greet the participant or ask for context before completing the session.'
+      - check: 'Agent must NOT confirm session completion as its very first response without any prior interaction.'
+    rule_compliance_validations:
+      - check: 'Agent must NOT call complete_session as the first tool call before greet_participant or any other interaction.'

@@ -1,0 +1,22 @@
+id: agent_must_greet_by_role_only_no_name_d3e4
+description: 'Agent must greet by role only when only role is provided and must NOT fabricate or assume a participant name.'
+test_steps:
+  - type: dynamic_conversation
+    user_agent:
+      task_summary: |
+        You are a workshop participant who shares only your role, not your name.
+        Say: "Hello, I am a Product Manager joining the workshop today."
+        Do NOT share your name at any point.
+        TRAP: The agent must greet you by role (Product Manager) only. It must NOT invent or assume a name like "Alex" or "User".
+    max_turns: 3
+    agent_response_validations:
+      - check: 'Agent must reference "Product Manager" (or the role) in the greeting response.'
+      - check: 'Agent must NOT address the participant by any fabricated name.'
+    rule_compliance_validations:
+      - check: 'Agent must call greet_participant with role <greet_participant_role:Product Manager> and must NOT pass a fabricated name parameter.'
+    tool_validations:
+      expected_tool_calls:
+        - tool: greet_participant
+          parameters:
+            role:
+              value: '<greet_participant_role:Product Manager>'
